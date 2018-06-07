@@ -3,6 +3,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import java.util.Map;
 import com.google.gson.Gson;
+
+import org.jetbrains.kotlin.com.intellij.util.containers.HashSet;
 import org.junit.Test;
 import docdigitales.ApiFacturacion;
 import docdigitales.JsonMap;
@@ -51,13 +53,14 @@ public class AppTest
         
         Map<String, Object> facturaCancelada = JsonMap.toMap(response);
         Map<String, Object> data = JsonMap.getData(facturaCancelada);
+
         assertEquals("Cancelado Exitosamente", (data.get("descripcion")));
     }
 
     @Test
     public void envioExitosoFactura() {
         String facturaEnvio = "{\"meta\":{\"empresa_uid\":\"asd123asd\",\"empresa_api_key\":\"123123123\",\"ambiente\":\"S\",\"objeto\":\"factura\"},\"data\":[{\"uuid\":[\"\"],\"destinatarios\":[{\"correo\":\"sandbox@docdigitales.com\"}],\"titulo\":\"Envio de Factura: 123\",\"texto\":\"Envio de Factura con folio 123, para su revision.\",\"pdf\":\"true\"}]}";
-        String[] uuidEnviar = {"F5903EAA-E758-4648-B67F-BAA3454F5A74"};
+        String[] uuidEnviar = {"ACF6B8DB-AA7C-4FBC-A0A2-D8FE04220E2B"};
         Map<String, Object> facturaDiccionario = JsonMap.toMap(facturaEnvio);
 
         // Establecer Parametros de envio
@@ -73,7 +76,7 @@ public class AppTest
     @Test
     public void descargaExitosaFactura() {
         String facturaDescarga = "{\"meta\":{\"empresa_uid\":\"asd123asd\",\"empresa_api_key\":\"123123123\",\"ambiente\":\"S\",\"objeto\":\"factura\"},\"data\":[{\"uuid\":[\"\"],\"destinatarios\":[{\"correo\":\"sandbox@docdigitales.com\"}],\"titulo\":\"Descargar factura\",\"texto\":\"Adjunto factura generada\",\"pdf\":\"true\"}]}";
-        String[] uuidDescargar = {"F5903EAA-E758-4648-B67F-BAA3454F5A74"};
+        String[] uuidDescargar = {"ACF6B8DB-AA7C-4FBC-A0A2-D8FE04220E2B"};
         Map<String, Object> facturaDiccionario = JsonMap.toMap(facturaDescarga);
 
         // Establecer parametros de envio
