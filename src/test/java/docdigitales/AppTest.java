@@ -38,9 +38,35 @@ public class AppTest
     }
 
     @Test
+    public void generarExitosamenteRecepion() {
+        // Json de Recepcion para generar (cambiar por los api keys de tu empresa)
+        String recepcion = "{\"meta\":{\"empresa_uid\":\"asd123asd\",\"empresa_api_key\":\"123123123\",\"ambiente\":\"S\",\"objeto\":\"recepcion\"},\"data\":[{\"datos_fiscales\":{\"certificado_pem\":\"\",\"llave_pem\":\"\",\"llave_password\":\"DDM090629R13\"},\"cfdi\":{\"cfdi__comprobante\":{\"folio\":\"793\",\"serie\":\"C\",\"fecha\":\"\",\"tipo_comprobante\":\"P\",\"lugar_expedicion\":\"83448\",\"moneda\":\"XXX\",\"subtotal\":\"0\",\"total\":\"0\",\"cfdi__emisor\":{\"rfc\":\"DDM090629R13\",\"nombre\":\"CARLOS CESAR OCHOA GAXIOLA\",\"regimen_fiscal\":\"601\"},\"cfdi__receptor\":{\"rfc\":\"GNP9211244P0\",\"nombre\":\"GRUPO NACIONAL PROVINCIAL S.A.B.\",\"uso_cfdi\":\"P01\"},\"cfdi__conceptos\":{\"cfdi__concepto\":[{\"clave_producto_servicio\":\"84111506\",\"clave_unidad\":\"ACT\",\"cantidad\":\"1\",\"descripcion\":\"Pago\",\"valor_unitario\":\"0\",\"importe\":\"0\"}]},\"cfdi__complemento\":{\"pago10__pagos\":{\"pago10__pago\":{\"fecha-pago\":\"2018-08-10T11:21:09\",\"forma-pago\":\"01\",\"tipo-cambio\":\"\",\"moneda\":\"MXN\",\"monto\":\"5000.00\",\"rfc-emisor-ordenante\":\"\",\"rfc-emisor-beneficiario\":\"\",\"nombre-banco-ordenante\":\"\",\"cuenta-ordenante\":\"\",\"cuenta-beneficiario\":\"\",\"tipo-cadena-pago\":\"\",\"num-operacion\":\"1123121241\",\"certificado-pago\":\"\",\"cadena-pago\":\"\",\"sello-pago\":\"\",\"pago10__docto_relacionado\":[{\"id-documento\":\"682C60DC-2A2F-47CD-A34D-39180EFAB2B1\",\"serie\":\"ASD\",\"folio\":\"53452\",\"moneda-dr\":\"MXN\",\"tipo-cambio-dr\":\"\",\"metodo-pago-dr\":\"PPD\",\"numero-parcialidad\":\"1\",\"importe-pagado\":\"5000.00\",\"importe-saldo-anterior\":\"7000.00\",\"importe-saldo-insoluto\":\"2000.00\"}]}}}}}}]}";
+        
+        // Certificado y Llave
+        String certificadoPem = Certificados.exportarCertificadoPem(PATH_CERTIFICADO);
+        String llavePem = Certificados.exportarLlavePem(PATH_LLAVE);
+
+        // Transformar JSON a Mapa
+        Map<String, Object> recepcionDiccionario = JsonMap.toMap(recepcion);
+
+        // Agregar los Datos fiscales y la fecha
+        recepcionDiccionario = JsonMap.setDatosFiscales(recepcionDiccionario, certificadoPem, llavePem, "DDM090629R13");
+        recepcionDiccionario = JsonMap.setFecha(recepcionDiccionario);
+
+        // Generar la Factura
+        String peticionGeneracion = gson.toJson(recepcionDiccionario);
+        String response = api.generacionRecepcionPago(peticionGeneracion);
+
+        // Verificar la respuesta
+        Map<String, Object> recepcionGenerada = JsonMap.toMap(response);
+        Map<String, Object> complemento = JsonMap.getComplemento(recepcionGenerada);
+        assertNotNull(complemento.get("uuid"));
+    }
+
+    @Test
     public void cancelarExitosamenteFactura() {
         String facturaCancelacion = "{\"meta\":{\"empresa_uid\":\"asd123asd\",\"empresa_api_key\":\"123123123\",\"ambiente\":\"S\",\"objeto\":\"factura\"},\"data\":[{\"rfc\":\"\",\"uuid\":[\"\"],\"datos_fiscales\":{\"certificado_pem\":\"\",\"llave_pem\":\"\",\"password_llave\":\"\"},\"acuse\": false}]}";
-        String[] uuidCancelar = {"C39C7784-B41E-40D6-89E7-46683205ED6C"};
+        String[] uuidCancelar = {"80B88D9E-9671-4BAB-9956-73E0BA3FB1D6"};
         // Certificado y Llave
         String certificadoPem = Certificados.exportarCertificadoPem(PATH_CERTIFICADO);
         String llavePem = Certificados.exportarLlavePem(PATH_LLAVE);
@@ -60,7 +86,7 @@ public class AppTest
     @Test
     public void envioExitosoFactura() {
         String facturaEnvio = "{\"meta\":{\"empresa_uid\":\"asd123asd\",\"empresa_api_key\":\"123123123\",\"ambiente\":\"S\",\"objeto\":\"factura\"},\"data\":[{\"uuid\":[\"\"],\"destinatarios\":[{\"correo\":\"sandbox@docdigitales.com\"}],\"titulo\":\"Envio de Factura: 123\",\"texto\":\"Envio de Factura con folio 123, para su revision.\",\"pdf\":\"true\"}]}";
-        String[] uuidEnviar = {"ACF6B8DB-AA7C-4FBC-A0A2-D8FE04220E2B"};
+        String[] uuidEnviar = {"80B88D9E-9671-4BAB-9956-73E0BA3FB1D6"};
         Map<String, Object> facturaDiccionario = JsonMap.toMap(facturaEnvio);
 
         // Establecer Parametros de envio
@@ -76,7 +102,7 @@ public class AppTest
     @Test
     public void descargaExitosaFactura() {
         String facturaDescarga = "{\"meta\":{\"empresa_uid\":\"asd123asd\",\"empresa_api_key\":\"123123123\",\"ambiente\":\"S\",\"objeto\":\"factura\"},\"data\":[{\"uuid\":[\"\"],\"destinatarios\":[{\"correo\":\"sandbox@docdigitales.com\"}],\"titulo\":\"Descargar factura\",\"texto\":\"Adjunto factura generada\",\"pdf\":\"true\"}]}";
-        String[] uuidDescargar = {"ACF6B8DB-AA7C-4FBC-A0A2-D8FE04220E2B"};
+        String[] uuidDescargar = {"80B88D9E-9671-4BAB-9956-73E0BA3FB1D6"};
         Map<String, Object> facturaDiccionario = JsonMap.toMap(facturaDescarga);
 
         // Establecer parametros de envio

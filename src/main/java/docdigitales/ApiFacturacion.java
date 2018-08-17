@@ -5,27 +5,32 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ApiFacturacion {
-
-  private final String EMPRESA_API_KEY = "123123123";
+  
+  private final String EMPRESA_API_KEY = "123123123"; // Cambiar por el API key de tu empresa
   public  final static okhttp3.MediaType JSON = okhttp3.MediaType.parse("application/json; charset=utf-8");
   
   public String generacionFactura(String peticionGeneracion) {
-    String uriGeneracion = "http://api.docdigitales.com/v1/facturas/generar";
+    String uriGeneracion = "https://api.docdigitales.com/v1/facturas/generar";
     return getPostResponse(uriGeneracion, peticionGeneracion);
   }
 
+  public String generacionRecepcionPago(String peticionGeneracionRecepcion) {
+    String uriGeneracion = "https://api.docdigitales.com/v1/recepciones_pago/generar";
+    return getPostResponse(uriGeneracion, peticionGeneracionRecepcion);
+  }
+
   public String cancelacionFactura(String peticionCancelacion) {
-    String uriCancelacion = "http://api.docdigitales.com/v1/facturas/cancelar";
+    String uriCancelacion = "https://api.docdigitales.com/v1/facturas/cancelar";
     return getPostResponse(uriCancelacion, peticionCancelacion);
   }
 
   public String envioFactura(String peticionEnvio) {
-    String uriEnvio = "http://api.docdigitales.com/v1/facturas/enviar";
+    String uriEnvio = "https://api.docdigitales.com/v1/facturas/enviar";
     return getPostResponse(uriEnvio, peticionEnvio);
   }
 
   public String descargaFactura(String peticionDescarga) {
-    String uriDescarga = "http://api.docdigitales.com/v1/facturas/descargar";
+    String uriDescarga = "https://api.docdigitales.com/v1/facturas/descargar";
     return getPostResponse(uriDescarga, peticionDescarga);
   }
 
